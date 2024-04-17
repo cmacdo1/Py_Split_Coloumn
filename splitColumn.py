@@ -17,14 +17,19 @@ def main():
 
     with open(input_file, 'r', newline='') as infile, open(output_file, 'w', newline='') as outfile:
         reader = csv.DictReader(infile)
-        fieldnames = reader.fieldnames + ['First Name', 'Last Name']
+        fieldnames = ['First Name', 'Last Name'] + [name for name in reader.fieldnames if name not in ['fullName', 'id', 'tier', 'First Name', 'Last Name']]
         writer = csv.DictWriter(outfile, fieldnames=fieldnames)
 
         # Write the header to the output file
         writer.writeheader()
 
+        rows = []
         # Process each row in the input file
         for row in reader:
+            # Skip empty rows
+            if not any(row.values()):
+                continue
+
             full_name = row['fullName']
             first_name, last_name = split_name(full_name)
 
@@ -32,10 +37,22 @@ def main():
             row['First Name'] = first_name
             row['Last Name'] = last_name
 
-            # Write the row to the output file
+            # Remove the original full name from the row
+            del row['fullName']
+            del row['id']
+            del row['tier']
+
+            # Add the row to the list
+            rows.append(row)
+
+        # Sort the rows by 'Last Name' in ascending order
+        rows = sorted(rows, key=lambda row: row['Last Name'])
+
+        # Write the sorted rows to the output file
+        for row in rows:
             writer.writerow(row)
 
-    print("Names separated successfully. Output saved to", output_file)
+    print("Names separated and sorted successfully. Output saved to", output_file)
 
 if __name__ == "__main__":
     main()
