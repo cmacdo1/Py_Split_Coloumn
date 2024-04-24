@@ -1,4 +1,5 @@
 import csv
+import os
 
 def split_name(full_name):
     # Split the full name into first name and last name
@@ -12,12 +13,15 @@ def split_name(full_name):
     return first_name, last_name
 
 def main():
-    input_file = 'input.csv'
-    output_file = 'output.csv'
+    # Enter Absolute Path of the input file
+    input_file = input("Please enter the location of the input file: ")
+    directory, filename = os.path.split(input_file)
+    base, ext = os.path.splitext(filename)
+    output_file = os.path.join(directory, base + "_Formated" + ext)
 
     with open(input_file, 'r', newline='') as infile, open(output_file, 'w', newline='') as outfile:
         reader = csv.DictReader(infile)
-        fieldnames = ['First Name', 'Last Name'] + [name for name in reader.fieldnames if name not in ['fullName', 'id', 'tier', 'First Name', 'Last Name']]
+        fieldnames = ['First Name', 'Last Name'] + [name for name in reader.fieldnames if name not in ['fullName', 'id', 'tier', 'First Name', 'Last Name']] + [ 'Street','City', 'State', 'Zip']
         writer = csv.DictWriter(outfile, fieldnames=fieldnames)
 
         # Write the header to the output file
