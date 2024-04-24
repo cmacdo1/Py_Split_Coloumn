@@ -1,17 +1,15 @@
-This script reads data from a CSV file, splits the full names into first names and last names, and writes the data back to a new CSV file with the names separated.
+This Python script is designed to read a CSV file, process its contents, and write the processed data to a new CSV file. Here's a breakdown of what each part of the script does:
 
-Here's a step-by-step explanation:
+1. The split_name function takes a full name as input, splits it into first name and last name, and returns them. If the full name is empty, it returns empty strings for the first name and last name.
 
-1. The split_name(full_name) function takes a full name as input, splits it into words, and assigns the first word to first_name and the rest to last_name. If the full name is empty, both first_name and last_name are set to empty strings.
+2. The user is prompted to enter the location of the input file. The script then determines the directory, filename, and extension of the input file.
 
-2. The main() function first defines the names of the input and output files.
+3. The output file is created in the same directory as the input file, with the same name and extension, but with "_Formated" appended to the name.
 
-3. It then opens the input file for reading and the output file for writing. The with statement ensures that both files are properly closed after they are no longer needed.
+4. The script opens the input file for reading and the output file for writing. It uses the csv.DictReader class to read the input file, which treats each row as a dictionary where the keys are the field names and the values are the field values.
 
-4. A csv.DictReader object is created for the input file, and a csv.DictWriter object is created for the output file. The field names for the writer are the same as for the reader, with the addition of 'First Name' and 'Last Name'.
+5. The field names for the output file are determined. They include "First Name" and "Last Name", as well as all the field names from the input file that are not "fullName", "id", "tier", "First Name", or "Last Name", and "Street", "City", "State", and "Zip".
 
-5. The header row is written to the output file.
+6. The script uses the csv.DictWriter class to write to the output file. The field names determined in the previous step are used as the header row of the output file.
 
-6. The script then enters a loop where it processes each row from the input file. For each row, it retrieves the full name, splits it into first and last names using the split_name() function, adds these names to the row, and writes the row to the output file.
-
-7. Finally, a message is printed to the console indicating that the operation was successful and where the output file was saved.
+7. The script then processes each row in the input file. If a row is empty (i.e., all its fields are empty), it is skipped. The processing logic for non-empty rows is not shown in the provided code.
